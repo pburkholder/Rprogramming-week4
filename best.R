@@ -22,6 +22,6 @@ best <- function(state, outcome) {
   column = valid_outcomes[[outcome]]
 
   outcomeByState[[state]][,column] <- as.numeric(outcomeByState[[state]][,column])
-  return(outcomeByState[[state]][,column])
-
+  first <- order(outcomeByState[[state]][,column])[1]
+  (outcomeByState[[state]][first,])[["Hospital.Name"]]
 }
