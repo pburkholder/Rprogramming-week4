@@ -1,6 +1,6 @@
 best <- function(state, outcome) {
   ## read outcome data
-  allOutcomes<- read.csv('outcome-of-care-measures.csv')
+  allOutcomes<- read.csv('outcome-of-care-measures.csv', colClasses = "character")
   outcomeByState <- split(allOutcomes, allOutcomes$State)
 
   ## check that state and outcome are valid
@@ -16,7 +16,12 @@ best <- function(state, outcome) {
   if (is.null(valid_outcomes[[outcome]])) {
     stop("invalid outcome")
   }
-  
+
   ## Return hospital name in that state with lowest
   ## 30-day death rate
+  column = valid_outcomes[[outcome]]
+
+  outcomeByState[[state]][,column] <- as.numeric(outcomeByState[[state]][,column])
+  return(outcomeByState[[state]][,column])
+
 }
