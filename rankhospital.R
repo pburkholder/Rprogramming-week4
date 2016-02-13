@@ -24,7 +24,13 @@ rankhospital <- function(state, outcome, rank=5) {
   myState <- outcomeByState[[state]]
 
   myState[,column] <- as.numeric(myState[,column])
-  top <- order(myState[,column], myState$Hospital.Name)[1:rank]
-  
-  (myState[top,])[["Hospital.Name"]]
+  ranked_by_outcome <- order(myState[,column], myState[["Hospital.Name"]], na.last=NA)
+
+  superlative_to_n <- function(x) {
+    if (x == "") return(1)
+    if (x == "worst") return(length(ranked_by_outcome))
+    x
+  }
+
+  (myState[ranked_by_outcome[superlative_to_n(rank)],])[["Hospital.Name"]]
 }
