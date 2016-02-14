@@ -19,26 +19,30 @@ rankall <- function(outcome="heart failure", num = 1) {
 
   outcomeByState <- split(allOutcomes, allOutcomes$State)
 
+
+
   rankByState <- lapply(outcomeByState, function(x) {
       x[,column] <- as.numeric(x[,column])
-      order(x[,column], x[["Hospital.Name"]], na.last=NA)[1] # 1 is best
+      
+      superlative_to_n <- function(y,z) {
+        if (y == "best") return(1)
+        if (y == "worst") return(length(z))
+        y
+      }
+      o <- order(x[,column], x[["Hospital.Name"]], na.last=NA)
+      numnum <- superlative_to_n(num,o)
+      o[numnum]
     }
   )
-
-
-  superlative_to_n <- function(x) {
-    if (x == "best") return(1)
-    if (x == "worst") return(length(ranked_by_outcome))
-    x
-  }
 
   listByState <- lapply(
     names(rankByState),
     function(x) {
-      c("state"=x, "hospital"=outcomeByState[[x]][rankByState[[x]][1], 2])
+      c(x,outcomeByState[[x]][rankByState[[x]][1], 2])
     }
   )
- 
+
+  #data.frame(state=listByState[,1], hospital=listByState[,2])
   listByState
 
 }
