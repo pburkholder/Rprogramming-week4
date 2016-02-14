@@ -1,13 +1,13 @@
-#rankall <- function(outcome="heart failure", num = "best") {
-rankall <- function(outcome="heart failure", num = 1) {
+rankall <- function(outcome="pneumonia", num = "worst") {
   ## read outcome data
-  allOutcomes<- read.csv('outcome-of-care-measures.csv', colClasses = "character")
+  allOutcomes<- read.csv('woutcome-of-care-measures.csv', colClasses = "character")
 
   valid_outcomes <- list(
     "heart attack"=11,
     "heart failure"=17,
-    "pneumonia"=25)
+    "pneumonia"=23)
 
+  # convert string outcome to a colum number
   column = valid_outcomes[[outcome]]
 
   if (is.null(valid_outcomes[[outcome]])) {
@@ -17,13 +17,19 @@ rankall <- function(outcome="heart failure", num = 1) {
   ## Return a data frame with hospital names and
   ## the (abbreviated) state name
 
+  # split by State
   outcomeByState <- split(allOutcomes, allOutcomes$State)
 
 
-
+  # pass each element (state) of outcomeByState
+  # into lapply and apply a function to do rank by outcome
   rankByState <- lapply(outcomeByState, function(x) {
-      x[,column] <- as.numeric(x[,column])
-      
+      # column is a global here
+      suppressWarnings(
+       x[,column] <- as.numeric(x[,column])
+      )
+      # convert 'best' to 1
+      # convert 'worst' to the last element of z
       superlative_to_n <- function(y,z) {
         if (y == "best") return(1)
         if (y == "worst") return(length(z))
@@ -42,7 +48,7 @@ rankall <- function(outcome="heart failure", num = 1) {
     }
   )
 
-  #data.frame(state=listByState[,1], hospital=listByState[,2])
-  listByState
-
+  m <- matrix(unlist(listByState), ncol=2, byrow=T)
+  colnames(m) <- c("State", "Hospital")
+  data.frame(m)
 }
