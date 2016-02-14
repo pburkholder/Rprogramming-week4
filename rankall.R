@@ -1,6 +1,6 @@
-rankall <- function(outcome="pneumonia", num = "worst") {
+rankall <- function(outcome="pneumonia", num = "best") {
   ## read outcome data
-  allOutcomes<- read.csv('woutcome-of-care-measures.csv', colClasses = "character")
+  allOutcomes<- read.csv('outcome-of-care-measures.csv', colClasses = "character")
 
   valid_outcomes <- list(
     "heart attack"=11,
@@ -44,11 +44,12 @@ rankall <- function(outcome="pneumonia", num = "worst") {
   listByState <- lapply(
     names(rankByState),
     function(x) {
-      c(x,outcomeByState[[x]][rankByState[[x]][1], 2])
+        c(outcomeByState[[x]][rankByState[[x]][1], 2], x)
     }
+    
   )
 
   m <- matrix(unlist(listByState), ncol=2, byrow=T)
-  colnames(m) <- c("State", "Hospital")
+  colnames(m) <- c("Hospital", "State")
   data.frame(m)
 }
