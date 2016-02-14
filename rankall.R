@@ -32,8 +32,13 @@ rankall <- function(outcome="heart failure", num = 1) {
     x
   }
 
-  state="TX"
-  outcomeByState[[state]][ rankByState[[state]][1], 2 ]
-#  (myState[ranked_by_outcome[superlative_to_n(rank)],])[["Hospital.Name"]]
+  listByState <- lapply(
+    names(rankByState),
+    function(x) {
+      c("state"=x, "hospital"=outcomeByState[[x]][rankByState[[x]][1], 2])
+    }
+  )
+ 
+  listByState
 
 }
