@@ -50,6 +50,6 @@ rankall <- function(outcome="pneumonia", num = "best") {
   )
 
   m <- matrix(unlist(listByState), ncol=2, byrow=T)
-  colnames(m) <- c("Hospital", "State")
+  colnames(m) <- c("hospital", "state")
   data.frame(m)
 }

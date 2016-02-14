@@ -1,16 +1,17 @@
 rankhospital <- function(state, outcome, rank=5) {
   ## read outcome data
   allOutcomes<- read.csv('outcome-of-care-measures.csv', colClasses = "character")
-
+  outcomeByState <- split(allOutcomes, allOutcomes$State)
+  
   ## check that state and outcome are valid
-  if (is.null(nrow(byState[[state]]))) {
+  if (is.null(nrow(outcomeByState[[state]]))) {
     stop("invalid state")
   }
 
   valid_outcomes <- list(
     "heart attack"=11,
     "heart failure"=17,
-    "pneumonia"=25)
+    "pneumonia"=23)
 
   column = valid_outcomes[[outcome]]
 
@@ -20,7 +21,6 @@ rankhospital <- function(state, outcome, rank=5) {
 
   ## Return hospital name in that state with lowest
   ## 30-day death rate
-  outcomeByState <- split(allOutcomes, allOutcomes$State)
   myState <- outcomeByState[[state]]
 
   myState[,column] <- as.numeric(myState[,column])

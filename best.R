@@ -4,7 +4,7 @@ best <- function(state, outcome) {
   outcomeByState <- split(allOutcomes, allOutcomes$State)
 
   ## check that state and outcome are valid
-  if (is.null(nrow(byState[[state]]))) {
+  if (is.null(nrow(outcomeByState[[state]]))) {
     stop("invalid state")
   }
 
